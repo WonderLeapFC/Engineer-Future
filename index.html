@@ -29,6 +29,12 @@
 <script>
 (function(){
   'use strict';
+  // Suppress console logs in production (keep [WL] logs only)
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    var origLog = console.log; var origWarn = console.warn;
+    console.log = function() { if (arguments[0] && String(arguments[0]).indexOf('[WL]') === 0) origLog.apply(console, arguments); };
+    console.warn = function() {};
+  }
   var TOTAL_STAGES = 6;
   var stagesDone = 0;
   var stageScores = [];
