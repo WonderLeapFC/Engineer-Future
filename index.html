@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cocos Creator | UIDesignPattern</title>
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit"/>
+  <meta name="force-rendering" content="webkit"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="full-screen" content="yes"/>
+  <meta name="x5-fullscreen" content="true"/>
+  <meta name="360-fullscreen" content="true"/>
+  <meta name="x5-page-mode" content="app">
+  <link rel="stylesheet" type="text/css" href="style.f76d1.css"/>
+</head>
+<body>
+  <div id="GameDiv" cc_exact_fit_screen="true">
+    <div id="Cocos3dGameContainer">
+      <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+    </div>
+  </div>
+
+<!-- WonderLeap: Collect all stage scores, submit ONE cumulative score after final stage -->
+<script>
+(function(){
+  'use strict';
+  var TOTAL_STAGES = 6;
+  var stagesDone = 0;
+  var stageScores = [];
+  var realFetch = window.fetch;
+
+  var params = new URLSearchParams(window.location.search);
+  var hmacSecret = params.get('hmacSecret') || '';
+
+  async function signPayload(data) {
+    var msg = [data.sessionId, data.score, data.stars, data.timeSpent, data.attempts, data.accuracy].join(':');
+    var enc = new TextEncoder();
+    var key = await crypto.subtle.importKey('raw', enc.encode(hmacSecret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    var sig = await crypto.subtle.sign('HMAC', key, enc.encode(msg));
+    return Array.from(new Uint8Array(sig)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  }
+
+  window.fetch = function(url, opts) {
+    if (typeof url === 'string' && url.includes('submit-score') && opts && opts.method === 'POST') {
+      var body;
+      try { body = JSON.parse(opts.body); } catch(e) { return realFetch.apply(this, arguments); }
+
+      stagesDone++;
+      stageScores.push({
+        score: body.score || 0,
+        timeSpent: body.timeSpent || 0,
+        attempts: body.attempts || 0,
+        accuracy: body.accuracy || 0
+      });
+
+      console.log('[WL] Stage ' + stagesDone + '/' + TOTAL_STAGES + ' — score: ' + body.score + ', time: ' + body.timeSpent + 's');
+
+      if (stagesDone < TOTAL_STAGES) {
+        console.log('[WL] Stage ' + stagesDone + ' captured — holding (no postMessage will fire)');
+        return new Promise(function(){});
+      }
+
+      var totalScore = 0, totalTime = 0, totalAttempts = 0, totalAccuracy = 0;
+      stageScores.forEach(function(s) {
+        totalScore += s.score;
+        totalTime += s.timeSpent;
+        totalAttempts += s.attempts;
+        totalAccuracy += s.accuracy;
+      });
+
+      var finalScore = Math.round(totalScore / TOTAL_STAGES);
+      var finalAccuracy = Math.round(totalAccuracy / TOTAL_STAGES);
+      var finalStars = finalScore >= 90 ? 3 : finalScore >= 60 ? 2 : finalScore >= 30 ? 1 : 0;
+
+      console.log('[WL] All stages done — Final: score=' + finalScore + ', stars=' + finalStars + ', time=' + totalTime + 's, accuracy=' + finalAccuracy + '%');
+
+      var finalPayload = {
+        sessionId: body.sessionId,
+        score: finalScore,
+        stars: finalStars,
+        timeSpent: totalTime,
+        attempts: totalAttempts,
+        accuracy: finalAccuracy
+      };
+
+      return signPayload(finalPayload).then(function(sig) {
+        finalPayload.signature = sig;
+        console.log('[WL] Submitting cumulative score to backend...');
+        return realFetch.call(null, url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(finalPayload)
+        });
+      });
+    }
+    return realFetch.apply(this, arguments);
+  };
+
+  console.log('[WL] Score interceptor loaded — will collect ' + TOTAL_STAGES + ' stages before submitting');
+})();
+</script>
+
+<!-- Polyfills bundle. -->
+<script src="src/polyfills.bundle.5adbf.js" charset="utf-8"> </script>
+
+<!-- SystemJS support. -->
+<script src="src/system.bundle.543e6.js" charset="utf-8"> </script>
+
+<!-- Import map -->
+<script src="src/import-map.b52cb.json" type="systemjs-importmap" charset="utf-8"> </script>
+
+<script>
+    System.import('./index.78d68.js').catch(function(err) { console.error(err); })
+</script>
+
+</body>
+</html>

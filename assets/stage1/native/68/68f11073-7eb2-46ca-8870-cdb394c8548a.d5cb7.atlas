@@ -1,0 +1,160 @@
+drill_sparks.png
+size:4096,512
+filter:Linear,Linear
+pma:true
+scale:0.8
+spark output/spark_00000
+bounds:421,190,14,7
+offsets:317,269,400,400
+spark output/spark_00001
+bounds:3273,13,44,38
+offsets:295,248,400,400
+rotate:90
+spark output/spark_00002
+bounds:3223,4,53,48
+offsets:273,231,400,400
+rotate:90
+spark output/spark_00003
+bounds:3649,4,95,71
+offsets:250,216,400,400
+spark output/spark_00004
+bounds:3963,284,120,86
+offsets:224,196,400,400
+spark output/spark_00005
+bounds:3963,372,138,127
+offsets:196,172,400,400
+rotate:90
+spark output/spark_00006
+bounds:3796,343,167,165
+offsets:167,146,400,400
+rotate:90
+spark output/spark_00007
+bounds:451,6,208,191
+offsets:141,118,400,400
+spark output/spark_00008
+bounds:3197,285,225,218
+offsets:131,90,400,400
+rotate:90
+spark output/spark_00009
+bounds:2724,253,245,257
+offsets:104,49,400,400
+spark output/spark_00010
+bounds:661,3,198,248
+offsets:142,59,400,400
+rotate:90
+spark output/spark_00030
+bounds:661,3,198,248
+offsets:142,59,400,400
+rotate:90
+spark output/spark_00011
+bounds:643,203,227,307
+offsets:115,23,400,400
+spark output/spark_00012
+bounds:2,186,222,324
+offsets:132,22,400,400
+spark output/spark_00013
+bounds:2328,4,239,224
+offsets:111,133,400,400
+rotate:90
+spark output/spark_00014
+bounds:1403,2,233,227
+offsets:112,138,400,400
+spark output/spark_00015
+bounds:2462,246,260,264
+offsets:86,106,400,400
+spark output/spark_00016
+bounds:3007,27,226,214
+offsets:111,158,400,400
+rotate:90
+spark output/spark_00017
+bounds:3417,290,220,220
+offsets:122,141,400,400
+spark output/spark_00018
+bounds:3440,73,215,169
+offsets:126,133,400,400
+rotate:90
+spark output/spark_00019
+bounds:3611,77,209,211
+offsets:133,98,400,400
+spark output/spark_00020
+bounds:1137,17,186,264
+offsets:161,63,400,400
+rotate:90
+spark output/spark_00021
+bounds:421,199,220,311
+offsets:134,28,400,400
+spark output/spark_00022
+bounds:2782,7,244,223
+offsets:108,125,400,400
+rotate:90
+spark output/spark_00023
+bounds:2218,245,242,265
+offsets:115,89,400,400
+spark output/spark_00024
+bounds:1101,205,257,305
+offsets:88,52,400,400
+spark output/spark_00025
+bounds:2,2,182,259
+offsets:155,95,400,400
+rotate:90
+spark output/spark_00026
+bounds:1607,237,207,273
+offsets:127,62,400,400
+spark output/spark_00027
+bounds:2554,18,226,226
+offsets:123,108,400,400
+spark output/spark_00028
+bounds:1638,4,231,241
+offsets:125,90,400,400
+rotate:90
+spark output/spark_00029
+bounds:1360,231,245,279
+offsets:104,49,400,400
+spark output/spark_00031
+bounds:872,203,227,307
+offsets:115,23,400,400
+spark output/spark_00032
+bounds:226,186,193,324
+offsets:131,22,400,400
+spark output/spark_00033
+bounds:2971,284,226,224
+offsets:111,133,400,400
+rotate:90
+spark output/spark_00034
+bounds:2098,3,240,228
+offsets:111,137,400,400
+rotate:90
+spark output/spark_00035
+bounds:1961,245,255,265
+offsets:86,105,400,400
+spark output/spark_00036
+bounds:1881,8,231,215
+offsets:111,158,400,400
+rotate:90
+spark output/spark_00037
+bounds:3223,59,215,224
+offsets:118,138,400,400
+spark output/spark_00038
+bounds:263,5,186,179
+offsets:150,121,400,400
+spark output/spark_00039
+bounds:911,13,188,224
+offsets:126,86,400,400
+rotate:90
+spark output/spark_00040
+bounds:1816,241,143,269
+offsets:148,50,400,400
+spark output/spark_00041
+bounds:3639,335,155,175
+offsets:120,151,400,400
+spark output/spark_00042
+bounds:3440,12,59,207
+offsets:195,122,400,400
+rotate:90
+spark output/spark_00043
+bounds:3313,14,43,34
+offsets:172,296,400,400
+rotate:90
+spark output/spark_00044
+bounds:2971,255,37,27
+offsets:150,298,400,400
