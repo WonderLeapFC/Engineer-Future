@@ -16,6 +16,11 @@
   <meta name="x5-fullscreen" content="true"/>
   <meta name="360-fullscreen" content="true"/>
   <meta name="x5-page-mode" content="app">
+  <script>
+  if(location.hostname!=="localhost"&&location.hostname!=="127.0.0.1"){
+    console.log=function(){};console.warn=function(){};console.error=function(){};console.info=function(){};console.debug=function(){};
+  }
+  </script>
   <link rel="stylesheet" type="text/css" href="style.f76d1.css"/>
 </head>
 <body>
@@ -29,21 +34,6 @@
 <script>
 (function(){
   'use strict';
-  // Suppress console logs in production (keep [WL] logs only)
-  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    var origLog = console.log; var origWarn = console.warn;
-    console.log = function() { if (arguments[0] && String(arguments[0]).indexOf('[WL]') === 0) origLog.apply(console, arguments); };
-    console.warn = function() {};
-  }
-  // Kill ALL console output in production — keep only [WL] logs
-  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    var _log = console.log;
-    console.log = function() { if (arguments[0] && String(arguments[0]).indexOf('[WL]') === 0) _log.apply(console, arguments); };
-    console.warn = function() {};
-    console.error = function() {};
-    console.info = function() {};
-    console.debug = function() {};
-  }
   var TOTAL_STAGES = 6;
   var stagesDone = 0;
   var stageScores = [];
@@ -73,10 +63,7 @@
         accuracy: body.accuracy || 0
       });
 
-      console.log('[WL] Stage ' + stagesDone + '/' + TOTAL_STAGES + ' — score: ' + body.score + ', time: ' + body.timeSpent + 's');
-
       if (stagesDone < TOTAL_STAGES) {
-        console.log('[WL] Stage ' + stagesDone + ' captured — holding (no postMessage will fire)');
         return new Promise(function(){});
       }
 
@@ -92,8 +79,6 @@
       var finalAccuracy = Math.round(totalAccuracy / TOTAL_STAGES);
       var finalStars = finalScore >= 90 ? 3 : finalScore >= 60 ? 2 : finalScore >= 30 ? 1 : 0;
 
-      console.log('[WL] All stages done — Final: score=' + finalScore + ', stars=' + finalStars + ', time=' + totalTime + 's, accuracy=' + finalAccuracy + '%');
-
       var finalPayload = {
         sessionId: body.sessionId,
         score: finalScore,
@@ -105,7 +90,6 @@
 
       return signPayload(finalPayload).then(function(sig) {
         finalPayload.signature = sig;
-        console.log('[WL] Submitting cumulative score to backend...');
         return realFetch.call(null, url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -115,8 +99,6 @@
     }
     return realFetch.apply(this, arguments);
   };
-
-  console.log('[WL] Score interceptor loaded — will collect ' + TOTAL_STAGES + ' stages before submitting');
 })();
 </script>
 
@@ -130,7 +112,7 @@
 <script src="src/import-map.b52cb.json" type="systemjs-importmap" charset="utf-8"> </script>
 
 <script>
-    System.import('./index.78d68.js').catch(function(err) { console.error(err); })
+    System.import('./index.78d68.js').catch(function(err) {})
 </script>
 
 </body>
