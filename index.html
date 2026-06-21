@@ -18,7 +18,9 @@
   <meta name="x5-page-mode" content="app">
   <script>
   if(location.hostname!=="localhost"&&location.hostname!=="127.0.0.1"){
-    console.log=function(){};window.addEventListener("unhandledrejection",function(e){e.preventDefault()});console.warn=function(){};console.error=function(){};console.info=function(){};console.debug=function(){};
+    var n=function(){};
+    window.console=Object.create(console,{log:{value:n},warn:{value:n},error:{value:n},info:{value:n},debug:{value:n}});
+    window.addEventListener("unhandledrejection",function(e){e.preventDefault()});
   }
   </script>
   <link rel="stylesheet" type="text/css" href="style.f76d1.css"/>
@@ -30,7 +32,6 @@
     </div>
   </div>
 
-<!-- WonderLeap: Collect all stage scores, submit ONE cumulative score after final stage -->
 <script>
 (function(){
   'use strict';
@@ -38,7 +39,6 @@
   var stagesDone = 0;
   var stageScores = [];
   var realFetch = window.fetch;
-
   var params = new URLSearchParams(window.location.search);
   var hmacSecret = params.get('hmacSecret') || '';
 
@@ -54,47 +54,18 @@
     if (typeof url === 'string' && url.includes('submit-score') && opts && opts.method === 'POST') {
       var body;
       try { body = JSON.parse(opts.body); } catch(e) { return realFetch.apply(this, arguments); }
-
       stagesDone++;
-      stageScores.push({
-        score: body.score || 0,
-        timeSpent: body.timeSpent || 0,
-        attempts: body.attempts || 0,
-        accuracy: body.accuracy || 0
-      });
-
-      if (stagesDone < TOTAL_STAGES) {
-        return new Promise(function(){});
-      }
-
-      var totalScore = 0, totalTime = 0, totalAttempts = 0, totalAccuracy = 0;
-      stageScores.forEach(function(s) {
-        totalScore += s.score;
-        totalTime += s.timeSpent;
-        totalAttempts += s.attempts;
-        totalAccuracy += s.accuracy;
-      });
-
-      var finalScore = Math.round(totalScore / TOTAL_STAGES);
-      var finalAccuracy = Math.round(totalAccuracy / TOTAL_STAGES);
-      var finalStars = finalScore >= 90 ? 3 : finalScore >= 60 ? 2 : finalScore >= 30 ? 1 : 0;
-
-      var finalPayload = {
-        sessionId: body.sessionId,
-        score: finalScore,
-        stars: finalStars,
-        timeSpent: totalTime,
-        attempts: totalAttempts,
-        accuracy: finalAccuracy
-      };
-
-      return signPayload(finalPayload).then(function(sig) {
-        finalPayload.signature = sig;
-        return realFetch.call(null, url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(finalPayload)
-        });
+      stageScores.push({ score: body.score||0, timeSpent: body.timeSpent||0, attempts: body.attempts||0, accuracy: body.accuracy||0 });
+      if (stagesDone < TOTAL_STAGES) { return new Promise(function(){}); }
+      var totalScore=0,totalTime=0,totalAttempts=0,totalAccuracy=0;
+      stageScores.forEach(function(s){ totalScore+=s.score; totalTime+=s.timeSpent; totalAttempts+=s.attempts; totalAccuracy+=s.accuracy; });
+      var finalScore=Math.round(totalScore/TOTAL_STAGES);
+      var finalAccuracy=Math.round(totalAccuracy/TOTAL_STAGES);
+      var finalStars=finalScore>=90?3:finalScore>=60?2:finalScore>=30?1:0;
+      var finalPayload={ sessionId:body.sessionId, score:finalScore, stars:finalStars, timeSpent:totalTime, attempts:totalAttempts, accuracy:finalAccuracy };
+      return signPayload(finalPayload).then(function(sig){
+        finalPayload.signature=sig;
+        return realFetch.call(null,url,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(finalPayload) });
       });
     }
     return realFetch.apply(this, arguments);
@@ -102,18 +73,10 @@
 })();
 </script>
 
-<!-- Polyfills bundle. -->
 <script src="src/polyfills.bundle.5adbf.js" charset="utf-8"> </script>
-
-<!-- SystemJS support. -->
 <script src="src/system.bundle.543e6.js" charset="utf-8"> </script>
-
-<!-- Import map -->
 <script src="src/import-map.b52cb.json" type="systemjs-importmap" charset="utf-8"> </script>
-
-<script>
-    System.import('./index.78d68.js').catch(function(err) {})
-</script>
+<script>System.import('./index.78d68.js').catch(function(err){})</script>
 
 </body>
 </html>
