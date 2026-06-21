@@ -18,7 +18,7 @@
   <meta name="x5-page-mode" content="app">
   <script>
   if(location.hostname!=="localhost"&&location.hostname!=="127.0.0.1"){
-    console.log=function(){};console.warn=function(){};console.error=function(){};console.info=function(){};console.debug=function(){};
+    console.log=function(){};window.addEventListener("unhandledrejection",function(e){e.preventDefault()});console.warn=function(){};console.error=function(){};console.info=function(){};console.debug=function(){};
   }
   </script>
   <link rel="stylesheet" type="text/css" href="style.f76d1.css"/>
